@@ -3,12 +3,34 @@
 import { Database } from "@/database.types"
 import useSWR from "swr"
 import { format } from 'date-fns'
-import commonFetcher from "@/app/utils/fetcher"
 
 type Note = Database['public']['Tables']['notes']['Row']
 
+async function fetcher(url: string) {
+    const res = await fetch(url, {
+        headers: new Headers({
+            apikey: process.env.NEXT_PUBLIC_API_KEY as string
+        }),
+        cache: 'no-cache'
+    });
+
+    if (!res.ok) {
+        throw new Error('Something went wrong');
+    }
+
+    return await res.json();
+}
+
+
 export default function NotesList() {
-    const {data, error, isLoading} = useSWR<Note[]>(`${process.env.NEXT_PUBLIC_URL}/rest/v1/notes?select=*`, commonFetcher);
+    const {
+        data,
+        error,
+        isLoading
+    } = useSWR<Note[]>(
+        `${process.env.NEXT_PUBLIC_URL}/rest/v1/notes?select=*`,
+        fetcher
+    );
 
     if (error) {
         return "An error has occurred.";

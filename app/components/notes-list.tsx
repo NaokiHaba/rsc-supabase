@@ -3,6 +3,7 @@
 import { Database } from "@/database.types"
 import useSWR from "swr"
 import { format } from 'date-fns'
+import Loading from "@/app/loading"
 
 type Note = Database['public']['Tables']['notes']['Row']
 
@@ -36,7 +37,7 @@ export default function NotesList() {
         return "An error has occurred.";
     }
     if (isLoading) {
-        return "Loading...";
+        return <Loading/>;
     }
 
     return (

@@ -31,7 +31,7 @@ export default function Auth() {
         return
       }
 
-      router.push('/')
+      router.push('/auth/todo-crud')
     } else {
       const { error } = await supabase.auth.signUp({
         email,
